@@ -1,18 +1,21 @@
 
-const PORT: u16 = 3030;
 
 /*#modules */
 mod controllers;
 mod structs;
 mod services;
 /* */
+use dotenv::dotenv;
+use std::env;
 use controllers::user::user_controller;
 use structs::response::Response;
 use warp::Filter;
 
 #[tokio::main]
 async fn main() {
-    let hello = warp::path!("hello").and(warp::get()).map(|| {
+    dotenv().ok();
+let port=env::var("PORT").expect("error env var not found in .env file");
+    let hello =warp::get().map(|| {
         let response = Response::new::<&str>("hello world",None);
 
         warp::reply::json(&response.to_json())
@@ -21,8 +24,8 @@ async fn main() {
     .or(hello);
 
     (|| {
-        println!("Server on in {}", PORT);
+        println!("Server on in {}",port);
     })();
 
-    warp::serve(routes).run(([127, 0, 0, 1], PORT)).await;
+    warp::serve(routes).run(([127, 0, 0, 1], port.parse::<u16>().unwrap())).await;
 }
