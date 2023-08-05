@@ -8,16 +8,22 @@ pub struct Response {
 }
 
 impl Response {
-    pub fn new<T:Serialize>(message: &str,data:T) -> Response {
+    pub fn new<T:Serialize>(message: &str, data:Option<T>) -> Response {
+       
+        let payload = match data {
+            
+            Some(d) => serde_json::to_string(&d).unwrap(),
+            None => String::new(),
+        };
         Response {
             message: message.to_string(),
-            payload:serde_json::to_string(&data).unwrap()
+            payload
         }
     }
     pub fn to_json(&self) -> Value {
         let model = Response {
             message: self.message.to_string(),
-            payload:self.payload.to_string()
+            payload:self.payload.clone()
         };
         serde_json::json!(&model)
     }

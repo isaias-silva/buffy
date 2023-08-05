@@ -1,18 +1,24 @@
+
 const PORT: u16 = 3030;
+
+/*#modules */
 mod controllers;
 mod structs;
-use controllers::user;
+mod services;
+/* */
+use controllers::user::user_controller;
 use structs::response::Response;
 use warp::Filter;
 
 #[tokio::main]
 async fn main() {
     let hello = warp::path!("hello").and(warp::get()).map(|| {
-        let response = Response::new("hello world", {});
+        let response = Response::new::<&str>("hello world",None);
 
         warp::reply::json(&response.to_json())
     });
-    let routes = user::user::me().or(hello);
+    let routes = user_controller::routes()
+    .or(hello);
 
     (|| {
         println!("Server on in {}", PORT);
