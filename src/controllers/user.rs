@@ -16,7 +16,7 @@ pub mod user_controller {
             .and(warp::path("me"))
             .map(|| {
                 warp::reply::with_status(
-                    warp::reply::json(&Response::new::<&str>("user info", None).to_json()),
+                    warp::reply::json(&Response::new::<&str>("user info", None,None).to_json()),
                     StatusCode::ACCEPTED,
                 )
             })

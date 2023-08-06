@@ -5,10 +5,11 @@ use serde_json::{self, Value};
 pub struct Response {
     message: String,
     payload:String,
+    token: Option<String>
 }
 
 impl Response {
-    pub fn new<T:Serialize>(message: &str, data:Option<T>) -> Response {
+    pub fn new<T:Serialize>(message: &str, data:Option<T>,token:Option<String>) -> Response {
        
         let payload = match data {
             
@@ -17,13 +18,15 @@ impl Response {
         };
         Response {
             message: message.to_string(),
-            payload
+            payload,
+            token:token
         }
     }
     pub fn to_json(&self) -> Value {
         let model = Response {
             message: self.message.to_string(),
-            payload:self.payload.clone()
+            payload:self.payload.clone(),
+            token:self.token.clone()
         };
         serde_json::json!(&model)
     }

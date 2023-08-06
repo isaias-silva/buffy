@@ -16,7 +16,7 @@ async fn main() {
     dotenv().ok();
 let port=env::var("PORT").expect("error env var not found in .env file");
     let hello =warp::get().map(|| {
-        let response = Response::new::<&str>("hello world",None);
+        let response = Response::new::<&str>("hello world",None,None);
 
         warp::reply::json(&response.to_json())
     });
