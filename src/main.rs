@@ -1,32 +1,21 @@
-
-
-/*#modules */
-mod controllers;
-mod structs;
-mod services;
-mod middlewares;
-/* */
+use actix_web::*;
 use dotenv::dotenv;
 use std::env;
-use controllers::user::user_controller;
-use structs::response::Response;
-use warp::Filter;
 
-#[tokio::main]
-async fn main() {
+
+#[actix_web::main]
+
+async fn main() -> Result<(), std::io::Error> {
+    
     dotenv().ok();
-let port=env::var("PORT").expect("error env var not found in .env file");
-    let hello =warp::get().map(|| {
-        let response = Response::new::<&str>("hello world",None,None);
+    let server = 
+    HttpServer::new(|| App::new());
 
-        warp::reply::json(&response.to_json())
-    });
-    let routes = user_controller::routes()
-    .or(hello);
+    let port = env::var("PORT").expect("error env var not found in .env file");
 
-    (|| {
-        println!("Server on in {}",port);
-    })();
-
-    warp::serve(routes).run(([127, 0, 0, 1], port.parse::<u16>().unwrap())).await;
+    let api = server
+        .bind(format!("127.0.0.1:{}", port))
+        .expect("error in connecting");
+    println!("server run in port {}", port);
+    api.run().await
 }
