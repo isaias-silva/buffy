@@ -4,6 +4,7 @@
 mod controllers;
 mod structs;
 mod services;
+mod middlewares;
 /* */
 use dotenv::dotenv;
 use std::env;

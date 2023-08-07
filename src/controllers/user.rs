@@ -1,16 +1,19 @@
 pub mod user_controller {
     use crate::{services::user::user_service::check_user, structs::body::body::Login};
 
-    pub use crate::structs::response::Response;
+  use crate::structs::response::Response;
     use warp::{hyper::StatusCode, Filter};
 
     static PATH: &str = "user";
+    
     pub fn routes() -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
+     
         let routes = me().or(login());
         routes
     }
 
     pub fn me() -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
+      
         warp::path(PATH)
             .and(warp::get())
             .and(warp::path("me"))
