@@ -1,7 +1,8 @@
+mod routes;
 use actix_web::*;
 use dotenv::dotenv;
 use std::env;
-
+use routes::stream;
 
 #[actix_web::main]
 
@@ -9,7 +10,7 @@ async fn main() -> Result<(), std::io::Error> {
     
     dotenv().ok();
     let server = 
-    HttpServer::new(|| App::new());
+    HttpServer::new(|| App::new().route("/file-stream", web::post().to(stream::stream_handler)));
 
     let port = env::var("PORT").expect("error env var not found in .env file");
 
